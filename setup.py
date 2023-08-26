@@ -70,7 +70,7 @@ def qsdk_reset_tree():
 def wlan_ap_reset_tree():
     os.chdir(git_clone_dir)
     run(["rm", "-rf", "openwrt"])
-    run(["git", "reset", "--hard", config.get("revision", config["branch"])], check=True)
+    run(["git", "reset", "--hard", config.get("revision", config.get("branch"))], check=True)
     run(["./setup.py", "--setup"])
 
 def reset_tree():
@@ -83,8 +83,7 @@ def reset_tree():
             wlan_ap_reset_tree()
         else:
             os.chdir(openwrt)
-            run(["git", "checkout", config["branch"]], check=True)
-            run(["git", "reset", "--hard", config.get("revision", config["branch"])], check=True)
+            run(["git", "reset", "--hard", config.get("revision", config.get("branch"))], check=True)
             run(["rm", "-rf", "profiles"], )
         print("### Reset done")
     except:
@@ -115,7 +114,7 @@ def pull_tree():
 def setup_tree():
     if not config.get("wlan_ap"):
         print("copy build scripts to " +openwrt + "/scripts")
-        call("cp ./scripts/* %s" % (path.join(openwrt,"scripts")), shell=True)
+        call("cp ./scripts/openwrt/* %s" % (path.join(openwrt,"scripts")), shell=True)
 
     try:
         print("### Copying files")
@@ -192,6 +191,9 @@ def setup_tree():
         sys.exit(1)
     finally:
         os.chdir(base_dir)
+    if  config.get("wlan_ap"):
+        print("copy build scripts to " +openwrt + "/scripts")
+        call("cp ./scripts/wlan-ap/* %s" % (path.join(openwrt,"scripts")), shell=True)
 
 def remove_feeds():
     try:
@@ -201,6 +203,8 @@ def remove_feeds():
             os.system('rm feeds -fr')
         if Path("package/feeds").exists():
             os.system('rm package/feeds -fr')
+        if Path("dl").exists():
+            os.system('rm -r dl')
         print("### Remove feeds done")
     except:
         print("### Remove feeds failed")

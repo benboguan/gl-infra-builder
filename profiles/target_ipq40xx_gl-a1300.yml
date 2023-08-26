@@ -6,25 +6,26 @@ description: Build image for the GL.iNET A1300
 feeds:
   - name: gl_feeds_commmon
     uri: https://github.com/gl-inet/gl-feeds.git
-    revision: b3d0c3b26e37e7e28261ad383f8f12372ee4b65f
-  - name: gl_feeds
+    revision: ac1ff5fb455c6d304aa435abb1c3eccf4878e28b
+  - name: gl_feeds_21_02
     uri: https://github.com/gl-inet/gl-feeds.git
-    revision: 4edc69c3011968aaf4905a5f10e5bfb3b87ab6ff
+    revision: 581563a214d313c367d7ffe5a1e9038fc18292ed
 
 packages:
   - wireless-regdb
   - wget-ssl
   - arp-scan
-  
+  - i2c-tools
+
 diffconfig: |
          CONFIG_PACKAGE_kmod-shortcut-fe-cm=y
          CONFIG_PACKAGE_wpad-basic-wolfssl=n 
-         CONFIG_PACKAGE_ath10k-firmware-qca4019=y
-         CONFIG_PACKAGE_ath10k-firmware-qca4019-ct=n
-         CONFIG_PACKAGE_kmod-ath10k=y
-         CONFIG_PACKAGE_kmod-ath10k-ct=n
+         CONFIG_PACKAGE_ath10k-firmware-qca4019=m
+         CONFIG_PACKAGE_ath10k-firmware-qca4019-ct=y
+         CONFIG_PACKAGE_kmod-ath10k=m
+         CONFIG_PACKAGE_kmod-ath10k-ct=y
          CONFIG_ATH10K_LEDS=y
-         CONFIG_ATH10K-CT_LEDS=n
+         CONFIG_ATH10K-CT_LEDS=y
          CONFIG_ATH10K_THERMAL=y
          CONFIG_SIGNATURE_CHECK=y
          CONFIG_KERNEL_DEVMEM=y

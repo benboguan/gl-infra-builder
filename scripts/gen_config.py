@@ -31,6 +31,7 @@ def usage(code: int = 0):
     print(
         f"""Usage: {sys.argv[0]} <profile> [options...]
 
+    keepfeeds           Do not remove old feeds
     clean           Remove feeds before setup
     list            List available profiles
     help            Print this message
@@ -185,6 +186,13 @@ def setup_feeds(profile):
 
     packages = ["./scripts/feeds", "install" ]
     for package in profile.get("packages", []):
+        p = package.split(":")
+        if len(p) == 2:
+            run(["./scripts/feeds", "uninstall", p[0]])
+            this_packages = ["./scripts/feeds", "install", "-p", p[1], p[0] ]
+            if run(this_packages).returncode:
+                die(f"Error installing packages")
+            continue
         packages.append(package)
     if len(packages) > 2:
         if run(packages).returncode:
@@ -231,11 +239,13 @@ if __name__ == "__main__":
 
     if "recovery" in sys.argv:
         profile = merge_profiles([ "ucentral-recovery", sys.argv[1] ], False)
+    elif "keepfeeds" in sys.argv:
+        profile = merge_profiles(sys.argv[2:])
     else:
         profile = merge_profiles(sys.argv[1:])
+        if run(["rm", "-rf", "feeds/", "package/feeds"]).returncode:
+          die("Failed to delete old feeds")
 
-    if run(["rm", "-rf", "feeds/", "package/feeds"]).returncode:
-        die("Failed to delete old feeds")
 
     print("Using the following profiles:")
     for d in profile.get("description"):

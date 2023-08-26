@@ -3,3 +3,14 @@ profile: glinet_gl-ar750s-nor-nand
 target: ath79
 subtarget: nand
 description: Build image for the GL.iNET AR750S
+feeds:
+  - name: gl_feeds_commmon
+    uri: https://github.com/gl-inet/gl-feeds.git
+    revision: 33f74f14f1298833e3a0f2f5480d5f560187d6fa
+  - name: gl_feeds_22_03
+    uri: https://github.com/gl-inet/gl-feeds.git
+    revision: 195dca0e10af66665aa59e33dc17edb784379732
+
+packages:
+  - tor:gl_feeds_common
+  - smstools3:gl_feeds_common
